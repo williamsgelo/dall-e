@@ -9,11 +9,13 @@ import { FormField, Loader } from '../components';
 // Create Post Form Function
 const CreatePost = () => {
   const Navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: '',
     prompt: '',
     photo: '',
   })
+
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -26,20 +28,20 @@ const CreatePost = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ prompt: form.prompt }),
+          body: JSON.stringify({
+            prompt: form.prompt,
+          }),
         });
 
         const data = await response.json();
-
-
-        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` })
-      } catch (error) {
-        alert(error);
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (err) {
+        alert(err);
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert('Please enter a prompt');
+      alert('Please provide proper prompt');
     }
   };
 
@@ -70,14 +72,12 @@ const CreatePost = () => {
     }
   }
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt(form.prompt)
     setForm({ ...form, prompt: randomPrompt })
-  }
+  };
 
   return (
     <section className="max-w-7xl mx-auto">
