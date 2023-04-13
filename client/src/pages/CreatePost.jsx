@@ -17,6 +17,15 @@ const CreatePost = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleSurpriseMe = () => {
+    const randomPrompt = getRandomPrompt(form.prompt)
+    setForm({ ...form, prompt: randomPrompt })
+  }
+
   const generateImage = async () => {
     if (form.prompt) {
       try {
@@ -26,7 +35,9 @@ const CreatePost = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ prompt: form.prompt }),
+          body: JSON.stringify({
+            prompt: form.prompt,
+          }),
         });
 
         const data = await response.json();
@@ -46,36 +57,27 @@ const CreatePost = () => {
 
     if (form.prompt && form.photo) {
       setLoading(true);
-
       try {
         const response = await fetch('https://dalle2-0-3jdc.onrender.com/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(form)
-        })
+          body: JSON.stringify({ ...form }),
+        });
 
         await response.json();
-        Navigate('/');
+        alert('Success');
+        navigate('/');
       } catch (err) {
-        alert(err)
+        alert(err);
       } finally {
         setLoading(false);
       }
     } else {
-      alert('Please enter a prompt and generate an image')
+      alert('Please generate an image with proper details');
     }
-  }
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const handleSurpriseMe = () => {
-    const randomPrompt = getRandomPrompt(form.prompt)
-    setForm({ ...form, prompt: randomPrompt })
-  }
+  };
 
   return (
     <section className="max-w-7xl mx-auto">
