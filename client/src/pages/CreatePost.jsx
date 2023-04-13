@@ -9,13 +9,11 @@ import { FormField, Loader } from '../components';
 // Create Post Form Function
 const CreatePost = () => {
   const Navigate = useNavigate();
-
   const [form, setForm] = useState({
     name: '',
     prompt: '',
     photo: '',
   })
-
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -23,14 +21,12 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('https://dalle-mzuj.onrender.com/api/v1/dalle', {
+        const response = await fetch('https://dalle2-0-3jdc.onrender.com/api/v1/dalle', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            prompt: form.prompt,
-          }),
+          body: JSON.stringify({ prompt: form.prompt }),
         });
 
         const data = await response.json();
@@ -52,7 +48,7 @@ const CreatePost = () => {
       setLoading(true);
 
       try {
-        const response = await fetch('https://dalle-mzuj.onrender.com/api/v1/post', {
+        const response = await fetch('https://dalle2-0-3jdc.onrender.com/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -72,12 +68,14 @@ const CreatePost = () => {
     }
   }
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt(form.prompt)
     setForm({ ...form, prompt: randomPrompt })
-  };
+  }
 
   return (
     <section className="max-w-7xl mx-auto">
